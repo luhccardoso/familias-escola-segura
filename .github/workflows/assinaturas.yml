@@ -1,0 +1,32 @@
+name: Atualizar assinaturas
+
+on:
+  schedule:
+    - cron: "17 * * * *"   # de hora em hora
+  workflow_dispatch:        # permite rodar manualmente pela aba Actions
+
+permissions:
+  contents: write
+
+concurrency:
+  group: assinaturas
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ler o total na Change.org
+        run: python3 scripts/contar_assinaturas.py
+      - name: Publicar se mudou
+        run: |
+          if git diff --quiet -- assets/assinaturas.json; then
+            echo "Sem mudança."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/assinaturas.json
+          git commit -m "Atualiza total de assinaturas"
+          git push

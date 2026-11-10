@@ -240,7 +240,23 @@
   /* ---------------- petição e compartilhamento ---------------- */
   function textoAssinaturas(n) { return n === 1 ? 'assinatura na petição' : 'assinaturas na petição'; }
   function notaContagem() {
-    return S.peticao.contagem_em ? 'Contagem de ' + dataBR(S.peticao.contagem_em) + '. O número em tempo real está na Change.org.' : null;
+    var c = S.peticao.contagem_em;
+    if (!c) return null;
+    var hora = String(c).match(/T(\d{2}):(\d{2})/);
+    return 'Atualizado automaticamente em ' + dataBR(c) + (hora ? ' às ' + hora[1] + 'h' + hora[2] : '') + '.';
+  }
+  /* Total de assinaturas: arquivo atualizado de hora em hora por uma tarefa do GitHub */
+  function carregarAssinaturas() {
+    if (!window.fetch) return;
+    fetch('assets/assinaturas.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+      .then(function (d) {
+        if (!d || typeof d.assinaturas !== 'number') return;
+        S.peticao.assinaturas = d.assinaturas;
+        if (d.atualizado_em) S.peticao.contagem_em = d.atualizado_em;
+        redesenharSlots();
+      })
+      .catch(function () { /* mantém o valor de config.js */ });
   }
   function mensagemCompartilhar() {
     return S.compartilhar_mensagem || (S.nome + ' — ' + S.missao + ' ' + DADOS.url);
@@ -1006,4 +1022,5 @@
   window.addEventListener('hashchange', rota);
   rota();
   carregar();
+  carregarAssinaturas();
 })();
