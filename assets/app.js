@@ -8,9 +8,21 @@
   var SITUACOES = { previsto: 'Previsto', realizado: 'Realizado', andamento: 'Em andamento', pendente: 'Pendente', aguardando: 'Aguardando', respondido: 'Respondido', vencido: 'Vencido sem resposta' };
   var DADOS = { site: CFG.padrao.site, resultados: CFG.padrao.resultados, pesquisa: window.PESQUISA, situacoes: SITUACOES, url: location.origin + location.pathname };
   var temCache = false;
+  var assinaturasLidas = null;
+  /* O conteúdo do site vem de config.js; a planilha pode complementar campos e envia os resultados da pesquisa */
+  function juntarSite(extra) {
+    var base = CFG.padrao.site, out = {}, k;
+    for (k in base) out[k] = base[k];
+    if (extra) for (k in extra) if (extra[k] !== undefined && extra[k] !== null && extra[k] !== '') out[k] = extra[k];
+    out.peticao = {}; for (k in base.peticao) out.peticao[k] = base.peticao[k];
+    if (extra && extra.peticao) for (k in extra.peticao) out.peticao[k] = extra.peticao[k];
+    if (assinaturasLidas) { out.peticao.assinaturas = assinaturasLidas.assinaturas; if (assinaturasLidas.atualizado_em) out.peticao.contagem_em = assinaturasLidas.atualizado_em; }
+    return out;
+  }
+  function juntarResultados(r) { return (r && r.aluno && r.responsavel) ? r : CFG.padrao.resultados; }
   try {
     var guardado = JSON.parse(window.localStorage.getItem('es_dados') || 'null');
-    if (guardado && guardado.site && CFG.api) { DADOS.site = guardado.site; DADOS.resultados = guardado.resultados; temCache = true; }
+    if (guardado && CFG.api) { DADOS.site = juntarSite(guardado.site); DADOS.resultados = juntarResultados(guardado.resultados); temCache = true; }
   } catch (e) { /* sem armazenamento */ }
   var S = DADOS.site;
   var estado = { carregado: !CFG.api || temCache, falhou: false, demo: !CFG.api };
@@ -43,8 +55,8 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         clearTimeout(tempo);
-        if (!d || !d.site) throw new Error('dados');
-        DADOS.site = d.site; DADOS.resultados = d.resultados; S = d.site;
+        if (!d || !d.resultados) throw new Error('dados');
+        DADOS.site = juntarSite(d.site); DADOS.resultados = juntarResultados(d.resultados); S = DADOS.site;
         estado.carregado = true; estado.falhou = false;
         try { window.localStorage.setItem('es_dados', JSON.stringify({ site: d.site, resultados: d.resultados })); } catch (e) { /* ok */ }
         redesenharSlots();
@@ -252,6 +264,7 @@
       .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
       .then(function (d) {
         if (!d || typeof d.assinaturas !== 'number') return;
+        assinaturasLidas = d;
         S.peticao.assinaturas = d.assinaturas;
         if (d.atualizado_em) S.peticao.contagem_em = d.atualizado_em;
         redesenharSlots();
