@@ -6,7 +6,7 @@
  *      mostra o conteúdo abaixo e a pesquisa NÃO grava respostas.
  */
 window.CONFIG = {
-  api: '',
+  api: 'https://script.google.com/macros/s/AKfycbxkkPIxpuEEaSbU3d7OK0ybe0qqEvjhVErtVYBuDZlqokIhdHiImYYEeZFARvKNHiA/exec',
   padrao: {
     "site": {
       "nome": "Famílias por uma Escola Segura",
