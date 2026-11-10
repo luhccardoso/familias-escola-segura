@@ -5,7 +5,7 @@
   var CFG = window.CONFIG || { api: '', padrao: {} };
   var T = window.TEXTOS;
   var app = document.getElementById('app');
-  var SITUACOES = { previsto: 'Previsto', realizado: 'Realizado', aguardando: 'Aguardando', respondido: 'Respondido', vencido: 'Vencido sem resposta' };
+  var SITUACOES = { previsto: 'Previsto', realizado: 'Realizado', andamento: 'Em andamento', pendente: 'Pendente', aguardando: 'Aguardando', respondido: 'Respondido', vencido: 'Vencido sem resposta' };
   var DADOS = { site: CFG.padrao.site, resultados: CFG.padrao.resultados, pesquisa: window.PESQUISA, situacoes: SITUACOES, url: location.origin + location.pathname };
   var temCache = false;
   try {
@@ -228,14 +228,31 @@
   }
 
   /* ---------------- componentes de status ---------------- */
-  var ICONE_SIT = { previsto: '📅', realizado: '✓', aguardando: '⏳', respondido: '✓', vencido: '!' };
+  var ICONE_SIT = { previsto: '📅', realizado: '✓', andamento: '✍️', pendente: '○', aguardando: '⏳', respondido: '✓', vencido: '!' };
   function pilula(sit) {
     return el('span', { class: 'pilula sit-' + sit }, el('span', { 'aria-hidden': 'true' }, ICONE_SIT[sit] || '•'), ' ' + (DADOS.situacoes[sit] || sit));
   }
   function proximoPrazo() {
     var abertas = S.etapas.filter(function (e) { var s2 = sit(e); return s2 !== 'realizado' && s2 !== 'respondido'; });
-    abertas.sort(function (a, b) { return String(a.data).localeCompare(String(b.data)); });
     return abertas[0] || null;
+  }
+
+  /* ---------------- petição e compartilhamento ---------------- */
+  function textoAssinaturas(n) { return n === 1 ? 'assinatura na petição' : 'assinaturas na petição'; }
+  function notaContagem() {
+    return S.peticao.contagem_em ? 'Contagem de ' + dataBR(S.peticao.contagem_em) + '. O número em tempo real está na Change.org.' : null;
+  }
+  function mensagemCompartilhar() {
+    return S.compartilhar_mensagem || (S.nome + ' — ' + S.missao + ' ' + DADOS.url);
+  }
+  function compartilharSite() {
+    var msg = mensagemCompartilhar();
+    if (navigator.share) { navigator.share({ title: S.nome, text: msg }).catch(function () {}); }
+    else { window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank', 'noopener'); }
+  }
+  function botaoAssinar(cls) {
+    return S.peticao.link ? linkExterno(S.peticao.link, '✍️ ' + (S.peticao.texto_botao || 'Assine a petição') + ' ↗', cls || 'btn') :
+      el('span', { class: 'btn btn-desativado', 'aria-disabled': 'true' }, 'Petição em breve');
   }
 
   /* ================= PÁGINA INICIAL ================= */
@@ -245,13 +262,13 @@
     return el('div', { class: 'destaque-grade' },
       el('div', { class: 'numero' },
         el('strong', null, num(ass)),
-        el('span', null, ass === 1 ? 'assinatura na petição pública' : 'assinaturas na petição pública'),
-        !S.peticao.link ? el('small', null, 'A petição será publicada em breve.') : null),
+        el('span', null, textoAssinaturas(ass)),
+        el('small', null, !S.peticao.link ? 'A petição será publicada em breve.' : notaContagem())),
       prox ? el('div', { class: 'prazo-atual' },
-        el('span', { class: 'rotulo' }, 'Próximo prazo'),
+        el('span', { class: 'rotulo' }, sit(prox) === 'andamento' ? 'Agora' : 'Próximo passo'),
         el('strong', null, prox.nome),
-        el('span', null, (sit(prox) === 'previsto' ? 'Previsto para ' : 'Até ') + dataBR(prox.data)),
-        pilula(sit(prox))) : el('div', { class: 'prazo-atual' }, el('strong', null, 'Todos os prazos foram cumpridos.')));
+        prox.data ? el('span', null, (sit(prox) === 'previsto' ? 'Previsto para ' : 'Até ') + dataBR(prox.data)) : (prox.prazo_texto ? el('span', null, prox.prazo_texto) : null),
+        pilula(sit(prox))) : el('div', { class: 'prazo-atual' }, el('strong', null, 'Todos os passos foram concluídos.')));
   }
 
   function viewInicio() {
@@ -260,6 +277,16 @@
         el('span', { class: 'peca peca-1', 'aria-hidden': 'true' }), el('span', { class: 'peca peca-2', 'aria-hidden': 'true' }), el('span', { class: 'peca peca-3', 'aria-hidden': 'true' }),
         el('p', { class: 'etiqueta' }, 'Movimento de famílias'),
         slot(function () { return [el('h1', null, S.nome), el('p', { class: 'missao' }, S.missao)]; }, true),
+        slot(function () {
+          var ass = S.peticao.assinaturas || 0;
+          return el('div', { class: 'chamada' },
+            el('p', { class: 'chamada-titulo' }, S.chamada || 'Uma escola segura não é um privilégio. É um direito.'),
+            el('p', { class: 'chamada-texto' }, 'Famílias do Colégio Ser estão se unindo por protocolos claros e ações permanentes contra o bullying e o cyberbullying. Sua assinatura faz parte disso.'),
+            el('div', { class: 'chamada-botoes' },
+              botaoAssinar('btn btn-cta'),
+              el('a', { href: '#/responsavel/mobilizacao', class: 'btn btn-sec' }, 'Entenda o movimento →')),
+            S.peticao.link && ass ? el('p', { class: 'chamada-num' }, el('strong', null, num(ass)), ' ' + textoAssinaturas(ass) + ' até agora. Assine e passe adiante!') : null);
+        }, true),
         el('div', { class: 'hero-ilustra' }, svg(ilustracaoMaos(false)))
       ),
       el('section', { class: 'manifesto', 'aria-label': 'Por que existimos' },
@@ -676,13 +703,12 @@
   }
 
   function blocoMobilizacao() {
-    var tl = S.etapas.slice().sort(function (a, b) { return String(a.data || '9').localeCompare(String(b.data || '9')); });
-    var linha = el('ol', { class: 'linha-tempo' }, tl.map(function (e) {
+    var linha = el('ol', { class: 'linha-tempo' }, S.etapas.map(function (e) {
       var st = sit(e);
       return el('li', { class: 'lt-item lt-' + st },
         el('span', { class: 'lt-ponto', 'aria-hidden': 'true' }),
         el('div', { class: 'lt-corpo' },
-          el('span', { class: 'lt-data' }, e.data ? dataBR(e.data) : 'Data a definir'),
+          e.data ? el('span', { class: 'lt-data' }, dataBR(e.data)) : null,
           el('strong', null, e.nome),
           e.prazo_texto ? el('span', { class: 'lt-prazo' }, e.prazo_texto) : null,
           pilula(st)));
@@ -705,36 +731,59 @@
 
     var ass = S.peticao.assinaturas || 0;
     var peticao = el('div', { class: 'peticao' },
-      el('p', { class: 'peticao-num' }, el('strong', null, num(ass)), ' ', ass === 1 ? 'assinatura na petição pública' : 'assinaturas na petição pública'),
-      S.peticao.link ? linkExterno(S.peticao.link, S.peticao.texto_botao + ' ↗', 'btn') :
-        el('span', { class: 'btn btn-desativado', 'aria-disabled': 'true' }, 'Petição em breve'),
-      el('p', { class: 'pequeno' }, 'A lista de quem assina nunca é publicada, só o total.'));
+      el('p', { class: 'peticao-num' }, el('strong', null, num(ass)), ' ', textoAssinaturas(ass)),
+      notaContagem() ? el('p', { class: 'pequeno' }, notaContagem()) : null,
+      botaoAssinar(),
+      S.peticao.link ? el('p', { class: 'pequeno' }, 'Assinar é gratuito: basta nome e e-mail. Depois de assinar, a Change.org pode sugerir uma contribuição para a plataforma. Não é necessário contribuir, e o movimento não recebe nenhum valor.') : null,
+      el('p', { class: 'pequeno' }, 'Este site mostra apenas o total de assinaturas.'));
 
-    var abaixo = S.abaixo_assinado ? el('details', { class: 'sanfona' }, el('summary', null, 'Ler o abaixo-assinado completo'), el('div', { class: 'integra' }, paragrafos(S.abaixo_assinado)))
-      : el('p', { class: 'vazio' }, 'O texto do abaixo-assinado está sendo finalizado pela Comissão de Famílias e será publicado aqui na íntegra.');
+    var pedidos = (S.pedidos && S.pedidos.length) ? el('div', null,
+      S.pedidos_intro ? el('p', null, S.pedidos_intro) : null,
+      el('ol', { class: 'pedidos' }, S.pedidos.map(function (p) {
+        return el('li', null, el('strong', null, p.t), el('span', null, p.x));
+      })),
+      S.peticao.link ? el('p', { class: 'pequeno' }, 'O texto completo está na página da petição.') : null)
+      : (S.abaixo_assinado ? el('details', { class: 'sanfona' }, el('summary', null, 'Ler o abaixo-assinado completo'), el('div', { class: 'integra' }, paragrafos(S.abaixo_assinado)))
+        : el('p', { class: 'vazio' }, 'O resumo dos pedidos será publicado aqui em breve.'));
 
-    var compartilhar = el('button', { type: 'button', class: 'btn btn-sec', onclick: function () {
-      var dados = { title: S.nome, text: S.missao, url: DADOS.url };
-      if (navigator.share) { navigator.share(dados).catch(function () {}); }
-      else { window.open('https://wa.me/?text=' + encodeURIComponent(S.nome + ' — ' + S.missao + ' ' + DADOS.url), '_blank', 'noopener'); }
-    } }, '📲 Compartilhar o site');
+    var resumo = el('div', { class: 'resumo-mob' },
+      S.chamada ? el('p', { class: 'resumo-chamada' }, S.chamada) : null,
+      paragrafos(S.resumo_situacao),
+      (S.compromissos && S.compromissos.length) ? el('ol', { class: 'compromissos' }, S.compromissos.map(function (c) { return el('li', null, c); })) : null,
+      S.resumo_fecho_destaque ? el('p', { class: 'resumo-forte' }, S.resumo_fecho_destaque) : null,
+      S.resumo_fecho ? paragrafos(S.resumo_fecho) : null);
+
+    var msg = mensagemCompartilhar();
+    var avisoCopia = el('p', { class: 'pequeno', role: 'status' });
+    var compartilhar = el('div', { class: 'compartilhar' },
+      el('p', null, 'Quanto mais famílias souberem, mais forte fica o pedido. Envie esta mensagem para os grupos da escola, para amigos e para quem se importa com as crianças:'),
+      el('blockquote', { class: 'msg-compartilhar' }, paragrafos(msg)),
+      el('div', { class: 'chamada-botoes' },
+        el('a', { href: 'https://wa.me/?text=' + encodeURIComponent(msg), target: '_blank', rel: 'noopener', class: 'btn btn-cta' }, '📲 Enviar no WhatsApp'),
+        el('button', { type: 'button', class: 'btn btn-sec', onclick: function () {
+          var feito = function () { avisoCopia.textContent = 'Mensagem copiada. É só colar onde quiser.'; };
+          if (navigator.clipboard) navigator.clipboard.writeText(msg).then(feito, function () { avisoCopia.textContent = 'Não foi possível copiar. Selecione o texto acima.'; });
+          else avisoCopia.textContent = 'Selecione o texto acima para copiar.';
+        } }, '📋 Copiar mensagem'),
+        navigator.share ? el('button', { type: 'button', class: 'btn btn-sec', onclick: compartilharSite }, '↗ Outros apps') : null),
+      avisoCopia);
 
     return el('div', null,
       estado.falhou ? el('p', { class: 'nota' }, 'Não foi possível carregar as atualizações agora. Recarregue a página em instantes.') : null,
-      el('h3', null, 'Resumo da situação'), paragrafos(S.resumo_situacao),
-      el('h3', null, 'Abaixo-assinado'), abaixo,
+      el('h3', null, 'Resumo da mobilização'), resumo,
+      el('h3', null, 'O que pede o abaixo-assinado'), pedidos,
       el('h3', null, 'Petição e adesão'), peticao,
-      el('h3', null, 'Linha do tempo e prazos'),
-      el('p', { class: 'pequeno' }, 'Prazos em dias úteis a partir do protocolo. Quando um prazo passa sem resposta, a situação muda para “vencido sem resposta”.'),
+      el('h3', null, 'Linha do tempo'),
+      el('p', { class: 'pequeno' }, 'As datas dos próximos passos serão definidas na reunião com a escola e publicadas aqui.'),
       linha,
       el('h3', null, 'Respostas da escola'), respostas,
       el('h3', null, 'Ações das famílias'), acoes,
       el('h3', null, 'Como ajudar'),
       el('ul', { class: 'passos' }, T.responsavel.comoAjudar.map(function (c, k) {
         return el('li', { class: 'passo' }, el('span', { class: 'passo-icone', 'aria-hidden': 'true' }, c.e),
-          el('div', null, el('strong', null, c.t), el('p', null, k === 0 && S.peticao.link ? 'O link está logo acima.' : c.x)));
+          el('div', null, el('strong', null, c.t), el('p', null, k === 0 && S.peticao.link ? 'O link está logo acima. Leva 1 minuto.' : c.x)));
       })),
-      compartilhar);
+      el('h3', { id: 'compartilhe' }, 'Compartilhe este site'), compartilhar);
   }
 
   /* ---------------- resultados da pesquisa ---------------- */

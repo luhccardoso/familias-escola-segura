@@ -376,3 +376,32 @@ ol.passos>li:not(:has(.passo-icone))::before{content:counter(p);flex:none;width:
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 @media print{.btn-ajuda,.chips{display:none}}
+
+/* ---------- chamada para assinar (primeira tela) ---------- */
+.chamada{position:relative;background:var(--tinta);color:#fff;border-radius:24px;padding:1.2rem 1.15rem 1.1rem;margin:1.1rem 0 .2rem;box-shadow:0 14px 30px -14px rgba(38,49,74,.55)}
+.chamada::after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;border:14px solid var(--amarelo);opacity:.45;right:-34px;top:-34px;pointer-events:none}
+.chamada-titulo{font:800 clamp(1.45rem,6.4vw,2rem)/1.08 var(--titulo);color:#fff;margin:0 0 .5rem;max-width:20ch;position:relative}
+.chamada-texto{color:#E8ECF5;margin:0 0 .8rem;position:relative}
+.chamada-botoes{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;position:relative}
+.chamada .btn-sec{color:#fff;border-color:#fff}
+.btn-cta{background:var(--coral-forte);border-color:var(--coral-forte);color:#fff;font-size:1.06rem;animation:pulso 2.4s ease-in-out infinite}
+.chamada-num{margin:.75rem 0 0;color:#E8ECF5;font-size:.95rem;position:relative}
+.chamada-num strong{color:var(--amarelo);font-size:1.15rem}
+@keyframes pulso{0%,100%{box-shadow:0 0 0 0 rgba(229,122,102,.55)}50%{box-shadow:0 0 0 10px rgba(229,122,102,0)}}
+@media (prefers-reduced-motion:reduce){.btn-cta{animation:none}}
+
+/* ---------- mobilização ---------- */
+.resumo-chamada{font:800 clamp(1.3rem,5.4vw,1.7rem)/1.1 var(--titulo);color:var(--tinta);background:var(--amarelo-claro);border-left:8px solid var(--amarelo);border-radius:14px;padding:.85rem 1rem;margin:.4rem 0 1rem}
+.resumo-forte{font:800 1.2rem/1.2 var(--titulo);color:var(--coral-forte);margin:1.1rem 0 .5rem}
+.compromissos,.pedidos{counter-reset:item;list-style:none;padding:0;margin:.6rem 0 1rem;display:grid;gap:.5rem}
+.compromissos li,.pedidos li{counter-increment:item;position:relative;background:var(--cartao);border:2px solid var(--linha);border-radius:16px;padding:.7rem .9rem .7rem 3rem}
+.compromissos li::before,.pedidos li::before{content:counter(item);position:absolute;left:.7rem;top:.62rem;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--pessego);color:var(--tinta);font:800 .95rem/1.7rem var(--titulo);text-align:center}
+.pedidos li{display:flex;flex-direction:column;gap:.15rem}
+.pedidos li strong{color:var(--tinta)}
+.lt-andamento .lt-ponto{background:var(--amarelo);border-color:#c9a23a}
+.lt-pendente .lt-ponto{border-style:dashed;border-color:#9aa3b5}
+.sit-andamento{background:var(--amarelo-claro);color:var(--tinta);border-color:var(--amarelo)}
+.sit-pendente{background:#fff;color:var(--suave-txt);border-color:#cfd5de;border-style:dashed}
+.compartilhar{background:var(--verde-claro);border-radius:22px;padding:1.1rem}
+.msg-compartilhar{background:#fff;border-radius:16px;border:2px dashed var(--verde);padding:.9rem 1rem;margin:.6rem 0 .8rem;font-size:.98rem}
+.msg-compartilhar p{margin:.35rem 0;word-break:break-word}

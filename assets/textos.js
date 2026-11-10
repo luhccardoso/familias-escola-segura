@@ -328,8 +328,8 @@ window.TEXTOS = {
     },
 
     comoAjudar: [
-      { e: '✍️', t: 'Assine a petição', x: 'Quando estiver publicada, o link aparece aqui.' },
-      { e: '📲', t: 'Compartilhe este site', x: 'Envie para outras famílias da escola.' },
+      { e: '✍️', t: 'Assine a petição', x: 'Leva 1 minuto: nome e e-mail.' },
+      { e: '📲', t: 'Compartilhe com outras famílias', x: 'Use a mensagem pronta logo abaixo e envie nos grupos da escola.' },
       { e: '📊', t: 'Responda à pesquisa', x: 'Anônima, 1 minuto. Ajuda a mostrar a dimensão do problema.' },
       { e: '💬', t: 'Converse com seus filhos', x: 'Use as orientações desta página.' }
     ]
