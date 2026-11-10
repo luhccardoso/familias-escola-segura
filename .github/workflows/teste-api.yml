@@ -1,0 +1,10 @@
+name: Teste da API da pesquisa
+on: push
+jobs:
+  teste:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GET (resultados)
+        run: curl -sS -L -m 60 "https://script.google.com/macros/s/AKfycbxkkPIxpuEEaSbU3d7OK0ybe0qqEvjhVErtVYBuDZlqokIhdHiImYYEeZFARvKNHiA/exec"; echo
+      - name: POST inválido (não grava nada)
+        run: curl -sS -L -m 60 -H 'Content-Type: text/plain;charset=utf-8' --data '{"versao":"teste","respostas":{}}' "https://script.google.com/macros/s/AKfycbxkkPIxpuEEaSbU3d7OK0ybe0qqEvjhVErtVYBuDZlqokIhdHiImYYEeZFARvKNHiA/exec"; echo
