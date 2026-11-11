@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main          # sempre a versão mais recente, mesmo em "Re-run"
+          fetch-depth: 0
       - name: Ler o total na Change.org
         run: python3 scripts/contar_assinaturas.py
       - name: Publicar se mudou
@@ -29,4 +32,14 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/assinaturas.json
           git commit -m "Atualiza total de assinaturas"
-          git push
+          # Se o site recebeu outra alteração enquanto a tarefa rodava,
+          # junta as duas e tenta de novo (até 3 vezes).
+          for tentativa in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push recusado (tentativa $tentativa). Tentando de novo..."
+            git rebase --abort 2>/dev/null || true
+            sleep 5
+          done
+          exit 1
