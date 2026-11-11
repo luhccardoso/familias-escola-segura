@@ -130,7 +130,6 @@
       el('p', { class: 'rodape-nome' }, S.nome),
       slot(function () {
         return [el('p', null, S.assinatura),
-          el('p', null, 'Contato: ', el('strong', null, S.contato || '—')),
           S.atualizado_em ? el('p', null, 'Última atualização: ' + dataBR(S.atualizado_em)) : null];
       }),
       el('p', null, t.independente),
