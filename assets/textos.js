@@ -335,7 +335,7 @@ window.TEXTOS = {
   },
 
   rodape: {
-    independente: 'Este site é uma iniciativa independente, criada e mantida voluntariamente por uma mãe que acredita que a proteção das crianças é uma responsabilidade de todos. Não é um canal oficial do Colégio Ser.',
+    independente: 'Iniciativa independente e voluntária, sem fins lucrativos, criada a partir da convicção de que a proteção das crianças é uma responsabilidade de todos. Não é um canal oficial do Colégio Ser.',
     naoSubstitui: 'Este site orienta, mas não substitui atendimento psicológico ou jurídico.',
     privacidade: 'Privacidade: este site não coleta dados pessoais. A pesquisa é anônima: não pedimos nome, e-mail, telefone ou turma, e não guardamos o endereço de internet (IP) de quem responde.'
   }
