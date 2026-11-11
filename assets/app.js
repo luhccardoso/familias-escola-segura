@@ -313,7 +313,7 @@
             el('p', { class: 'chamada-texto' }, 'Famílias do Colégio Ser estão se unindo por protocolos claros e ações permanentes contra o bullying e o cyberbullying. Sua assinatura faz parte disso.'),
             el('div', { class: 'chamada-botoes' },
               botaoAssinar('btn btn-cta'),
-              el('a', { href: '#/responsavel/mobilizacao', class: 'btn btn-sec' }, 'Entenda o movimento →')),
+              el('a', { href: '#/movimento', class: 'btn btn-sec' }, 'Entenda o movimento →')),
             S.peticao.link && ass ? el('p', { class: 'chamada-num' }, el('strong', null, num(ass)), ' ' + textoAssinaturas(ass) + ' até agora. Assine e passe adiante!') : null);
         }, true),
         el('div', { class: 'hero-ilustra' }, svg(ilustracaoMaos(false)))
@@ -338,7 +338,7 @@
       el('section', { class: 'destaque', 'aria-labelledby': 'tit-mob' },
         el('h2', { id: 'tit-mob' }, 'A mobilização'),
         slot(blocoDestaque),
-        el('a', { href: '#/responsavel/mobilizacao', class: 'btn' }, 'Acompanhe →')
+        el('a', { href: '#/movimento', class: 'btn' }, 'Acompanhe →')
       ),
       rodape()
     );
@@ -388,15 +388,16 @@
         )
       ]);
       if (!nivel) { add(main, rodape()); return; }
+      var tit = function (id) { return A.secoes.filter(function (x) { return x.id === id; })[0].titulo; };
       add(main, [
         navSecoes('aluno', A.secoes),
-        secao('quiz', A.secoes[0].titulo, quiz()),
-        secao('termometro', A.secoes[1].titulo, termometro()),
-        secao('comigo', A.secoes[2].titulo, blocoComigo()),
-        secao('vejo', A.secoes[3].titulo, blocoVejo()),
-        secao('internet', A.secoes[4].titulo, blocoInternet()),
-        secao('pesquisa', A.secoes[5].titulo, blocoChamadaPesquisa('aluno', A.pesquisa[nivel])),
-        secao('ajuda', A.secoes[6].titulo, el('div', null, el('p', { class: 'recado' }, 'Você não está sozinho, e a culpa não é sua.'), listaCanais(nivel))),
+        secao('pesquisa', tit('pesquisa'), blocoChamadaPesquisa('aluno', A.pesquisa[nivel])),
+        secao('quiz', tit('quiz'), quiz()),
+        secao('termometro', tit('termometro'), termometro()),
+        secao('comigo', tit('comigo'), blocoComigo()),
+        secao('vejo', tit('vejo'), blocoVejo()),
+        secao('internet', tit('internet'), blocoInternet()),
+        secao('ajuda', tit('ajuda'), el('div', null, el('p', { class: 'recado' }, 'Você não está sozinho, e a culpa não é sua.'), listaCanais(nivel))),
         rodape()
       ]);
     }
@@ -551,6 +552,7 @@
     var R = T.responsavel;
     corIdx = 0;
     var sec = R.secoes;
+    var tit = function (id) { return sec.filter(function (x) { return x.id === id; })[0].titulo; };
     return el('main', { id: 'conteudo', class: 'area area-resp' },
       barraTopo(true),
       el('header', { class: 'area-cabeca' },
@@ -558,16 +560,29 @@
         el('h1', null, 'Sou responsável'),
         el('p', null, R.intro)),
       navSecoes('responsavel', sec),
-      secao('sinais', sec[0].titulo, blocoSinais()),
-      secao('conversar', sec[1].titulo, blocoConversar()),
-      secao('vitima', sec[2].titulo, blocoVitima()),
-      secao('pratica', sec[3].titulo, blocoPratica()),
-      secao('direitos', sec[4].titulo, blocoDireitos()),
-      secao('dados', sec[5].titulo, blocoDados()),
-      secao('mobilizacao', sec[6].titulo, slot(blocoMobilizacao), 'secao-mob'),
-      secao('pesquisa', sec[7].titulo, el('div', null,
+      secao('pesquisa', tit('pesquisa'), el('div', null,
         blocoChamadaPesquisa('responsavel', 'Pesquisa anônima com 6 perguntas rápidas. Não pedimos nome, e-mail, telefone nem turma, e não há campos de texto.'),
         slot(blocoResultados))),
+      secao('sinais', tit('sinais'), blocoSinais()),
+      secao('conversar', tit('conversar'), blocoConversar()),
+      secao('vitima', tit('vitima'), blocoVitima()),
+      secao('pratica', tit('pratica'), blocoPratica()),
+      secao('direitos', tit('direitos'), blocoDireitos()),
+      secao('dados', tit('dados'), blocoDados()),
+      rodape()
+    );
+  }
+
+  /* ================= O MOVIMENTO (página própria) ================= */
+  function viewMovimento() {
+    corIdx = 0;
+    return el('main', { id: 'conteudo', class: 'area area-mov' },
+      barraTopo(true),
+      el('header', { class: 'area-cabeca' },
+        el('p', { class: 'sobretitulo' }, 'O movimento'),
+        el('h1', null, 'Entenda o movimento'),
+        el('p', null, 'O que as famílias estão pedindo, a petição, os prazos, as respostas da escola e como participar.')),
+      secao('mobilizacao', 'A mobilização', slot(blocoMobilizacao), 'secao-mob'),
       rodape()
     );
   }
@@ -1011,17 +1026,18 @@
     var partes = h.split('/');
     var area = partes[0] || 'inicio';
     var sub = partes[1] || '';
+    if (area === 'responsavel' && sub === 'mobilizacao') { area = 'movimento'; sub = ''; } // links antigos
     var chave = area === 'pesquisa' ? 'pesquisa-' + sub : area;
-    if (['inicio', 'aluno', 'responsavel', 'pesquisa-aluno', 'pesquisa-responsavel'].indexOf(chave) < 0) { chave = 'inicio'; sub = ''; }
+    if (['inicio', 'aluno', 'responsavel', 'movimento', 'pesquisa-aluno', 'pesquisa-responsavel'].indexOf(chave) < 0) { chave = 'inicio'; sub = ''; }
 
     if (chave !== renderizado) {
       areaAtual = chave;
       app.innerHTML = '';
-      var view = chave === 'aluno' ? viewAluno() : chave === 'responsavel' ? viewResponsavel()
+      var view = chave === 'aluno' ? viewAluno() : chave === 'responsavel' ? viewResponsavel() : chave === 'movimento' ? viewMovimento()
         : chave === 'pesquisa-aluno' ? viewPesquisa('aluno') : chave === 'pesquisa-responsavel' ? viewPesquisa('responsavel') : viewInicio();
       add(app, [view, botaoAjuda(), el('div', { id: 'anuncio', class: 'sr', 'aria-live': 'polite' })]);
       renderizado = chave;
-      document.title = (chave === 'aluno' ? 'Sou aluno · ' : chave === 'responsavel' ? 'Sou responsável · ' : chave.indexOf('pesquisa') === 0 ? 'Pesquisa · ' : '') + S.nome;
+      document.title = (chave === 'aluno' ? 'Sou aluno · ' : chave === 'responsavel' ? 'Sou responsável · ' : chave === 'movimento' ? 'O movimento · ' : chave.indexOf('pesquisa') === 0 ? 'Pesquisa · ' : '') + S.nome;
       if (!sub) window.scrollTo(0, 0);
     }
     if (sub && chave.indexOf('pesquisa') !== 0) {

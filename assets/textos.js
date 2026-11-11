@@ -55,7 +55,7 @@ window.TEXTOS = {
   /* ---------------- Página inicial ---------------- */
   inicio: {
     portaAluno: { titulo: 'Sou aluno', sub: 'Entenda, se proteja e ajude um colega' },
-    portaResp: { titulo: 'Sou responsável', sub: 'Orientação, direitos e a mobilização' }
+    portaResp: { titulo: 'Sou responsável', sub: 'Orientação, direitos e pesquisa' }
   },
 
   /* ---------------- Área do aluno ---------------- */
@@ -65,12 +65,12 @@ window.TEXTOS = {
       f2: 'Um espaço para entender o que é bullying e cyberbullying, saber como agir e onde buscar ajuda. Sem julgamento.'
     },
     secoes: [
+      { id: 'pesquisa', titulo: 'Pesquisa do aluno', curto: 'Pesquisa' },
       { id: 'quiz', titulo: 'Isso é bullying ou brincadeira?', curto: 'Quiz' },
       { id: 'termometro', titulo: 'Termômetro do respeito', curto: 'Termômetro' },
       { id: 'comigo', titulo: 'Se está acontecendo com você', curto: 'Comigo' },
       { id: 'vejo', titulo: 'Se você vê acontecer', curto: 'Eu vi' },
       { id: 'internet', titulo: 'Na internet', curto: 'Internet' },
-      { id: 'pesquisa', titulo: 'Pesquisa do aluno', curto: 'Pesquisa' },
       { id: 'ajuda', titulo: 'Onde buscar ajuda', curto: 'Ajuda' }
     ],
 
@@ -230,16 +230,15 @@ window.TEXTOS = {
 
   /* ---------------- Área do responsável ---------------- */
   responsavel: {
-    intro: 'Orientação prática para reconhecer sinais, conversar, agir e conhecer seus direitos. E o acompanhamento da mobilização das famílias.',
+    intro: 'Orientação prática para reconhecer sinais, conversar, agir e conhecer seus direitos.',
     secoes: [
+      { id: 'pesquisa', titulo: 'Pesquisa dos responsáveis', curto: 'Pesquisa' },
       { id: 'sinais', titulo: 'Sinais de alerta', curto: 'Sinais' },
       { id: 'conversar', titulo: 'Como conversar com seu filho', curto: 'Conversar' },
       { id: 'vitima', titulo: 'Se seu filho é vítima', curto: 'Se é vítima' },
       { id: 'pratica', titulo: 'Se seu filho pratica bullying', curto: 'Se pratica' },
       { id: 'direitos', titulo: 'Seus direitos', curto: 'Direitos' },
-      { id: 'dados', titulo: 'O que dizem os dados nacionais', curto: 'Dados' },
-      { id: 'mobilizacao', titulo: 'A mobilização', curto: 'Mobilização' },
-      { id: 'pesquisa', titulo: 'Pesquisa dos responsáveis', curto: 'Pesquisa' }
+      { id: 'dados', titulo: 'O que dizem os dados nacionais', curto: 'Dados' }
     ],
 
     sinais: {

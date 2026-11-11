@@ -121,6 +121,8 @@ main{max-width:760px;margin:0 auto;padding:0 1rem 7rem}
 .area-aluno .area-cabeca::before{background:var(--amarelo)}.area-aluno .area-cabeca::after{background:var(--coral)}
 .area-resp .area-cabeca{background:var(--azul-claro)}
 .area-resp .area-cabeca::before{background:var(--azul)}.area-resp .area-cabeca::after{background:var(--verde)}
+.area-mov .area-cabeca{background:var(--coral-claro)}
+.area-mov .area-cabeca::before{background:var(--coral)}.area-mov .area-cabeca::after{background:var(--amarelo)}
 .sobretitulo{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--tinta);margin:0 0 .3rem}
 .chips{position:sticky;top:0;z-index:5;display:flex;gap:.45rem;overflow-x:auto;padding:.7rem 1rem;margin:0 -1rem 1rem;background:rgba(255,249,242,.95);backdrop-filter:blur(6px);scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
