@@ -18,7 +18,7 @@ window.TEXTOS = {
   /* ---------------- Canais de ajuda (seção 8) ---------------- */
   canais: {
     adulto: [
-      { titulo: 'Coordenação do Colégio Ser', para: 'Primeiro contato sobre um caso', contato: [{ t: 'Pelo aplicativo Layers' }] },
+      { titulo: 'A escola', para: 'Primeiro contato sobre um caso', contato: [{ t: 'Pelos canais oficiais que a escola informa às famílias' }] },
       { titulo: 'Conselho Tutelar de Sorocaba', para: 'Violência ou risco a uma criança', contato: [
         { t: '(15) 3235-1212', tel: '1532351212', obs: 'seg. a sex., 8h às 17h' },
         { t: '125 ou 153', tel: '153', obs: 'fins de semana e feriados (Guarda Civil Municipal)' },
@@ -270,7 +270,7 @@ window.TEXTOS = {
         { t: 'Acolha', x: 'Diga que acredita nele, que a culpa não é dele e que vocês vão resolver juntos. Evite reações explosivas na frente da criança.' },
         { t: 'Registre', x: 'Anote datas, locais, o que aconteceu, como seu filho reagiu e quem presenciou. Um registro simples, feito no mesmo dia, vale muito.' },
         { t: 'Guarde provas', x: 'Em casos online, faça prints com data, nome do perfil e link. Não apague conversas e não repasse o conteúdo para outras pessoas.' },
-        { t: 'Comunique a escola por escrito', x: 'Pelo Layers, por e-mail ou por protocolo na secretaria. Peça confirmação de recebimento e guarde uma cópia. Use o modelo abaixo.' },
+        { t: 'Comunique a escola por escrito', x: 'Use os canais oficiais que a escola indica às famílias e siga as orientações dela. Guarde uma cópia do que enviar. Se quiser, use o modelo abaixo como ponto de partida.' },
         { t: 'Saiba o que esperar', x: 'Segundo as orientações do Ministério Público, diante de um caso a escola deve: acolher e identificar; interromper o comportamento; apoiar imediatamente a vítima; comunicar as famílias da vítima e de quem praticou; informar a direção e a equipe pedagógica; acionar o Conselho Tutelar e a rede de proteção quando for o caso; e registrar e acompanhar o caso.' },
         { t: 'Se não houver resposta ou houver risco', x: 'Procure o Conselho Tutelar ou o Disque 100. Em caso de agressão física ou ameaça grave, registre boletim de ocorrência. Para casos online, a SaferNet orienta.' }
       ],
@@ -334,8 +334,10 @@ window.TEXTOS = {
     ]
   },
 
+  avisoTopo: 'Iniciativa independente de famílias. Não é um canal oficial do Colégio Ser e não tem vínculo, autorização ou apoio da instituição.',
+
   rodape: {
-    independente: 'Iniciativa independente e voluntária, sem fins lucrativos, criada a partir da convicção de que a proteção das crianças é uma responsabilidade de todos. Não é um canal oficial do Colégio Ser.',
+    independente: 'Iniciativa independente e voluntária, sem fins lucrativos, criada a partir da convicção de que a proteção das crianças é uma responsabilidade de todos. Não é um canal oficial do Colégio Ser e não tem vínculo, autorização ou apoio da instituição.',
     naoSubstitui: 'Este site orienta, mas não substitui atendimento psicológico ou jurídico.',
     privacidade: 'Privacidade: este site não coleta dados pessoais. A pesquisa é anônima: não pedimos nome, e-mail, telefone ou turma, e não guardamos o endereço de internet (IP) de quem responde.'
   }

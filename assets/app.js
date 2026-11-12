@@ -116,10 +116,17 @@
   var nivel = store.get('es_nivel') === 'f2' ? 'f2' : (store.get('es_nivel') === 'f1' ? 'f1' : null);
 
   /* ---------------- estrutura comum ---------------- */
+  function avisoTopo() {
+    return el('p', { class: 'aviso-topo' }, T.avisoTopo);
+  }
+
   function barraTopo(voltar) {
-    return el('header', { class: 'barra' },
-      voltar ? el('a', { href: '#/', class: 'voltar', 'aria-label': 'Voltar ao início' }, '← Início') : null,
-      el('a', { href: '#/', class: 'marca' }, el('span', { class: 'marca-icone', 'aria-hidden': 'true' }), S.nome)
+    return el('div', null,
+      el('header', { class: 'barra' },
+        voltar ? el('a', { href: '#/', class: 'voltar', 'aria-label': 'Voltar ao início' }, '← Início') : null,
+        el('a', { href: '#/', class: 'marca' }, el('span', { class: 'marca-icone', 'aria-hidden': 'true' }), S.nome)
+      ),
+      avisoTopo()
     );
   }
 
@@ -301,6 +308,7 @@
 
   function viewInicio() {
     return el('main', { id: 'conteudo', class: 'inicio' },
+      avisoTopo(),
       el('header', { class: 'hero' },
         el('span', { class: 'peca peca-1', 'aria-hidden': 'true' }), el('span', { class: 'peca peca-2', 'aria-hidden': 'true' }), el('span', { class: 'peca peca-3', 'aria-hidden': 'true' }),
         el('p', { class: 'etiqueta' }, 'Movimento de famílias'),
