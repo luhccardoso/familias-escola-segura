@@ -64,7 +64,7 @@ window.CONFIG = {
         "contagem_em": "2026-11-10",
         "texto_botao": "Assine a petição"
       },
-      "compartilhar_mensagem": "Uma escola segura não é um privilégio. É um direito. 💛\n\nFamílias do Colégio Ser estão se unindo para construir, junto com a escola, protocolos claros e ações permanentes contra o bullying e o cyberbullying. Não é confronto: é cuidado com todas as nossas crianças.\n\nAssine a petição (leva 1 minuto) e passe adiante para outras famílias:\nhttps://www.change.org/colegioserseguro\n\nConheça o movimento: https://projetoescolasegura.com.br",
+      "compartilhar_mensagem": "Uma escola segura não é um privilégio. É um direito. 💛\n\nFamílias do Colégio Ser estão se unindo para construir, junto com a escola, protocolos claros e ações permanentes contra o bullying e o cyberbullying. Não é confronto: é cuidado com todas as nossas crianças.\n\nConheça o movimento, assine a petição (leva 1 minuto) e passe adiante para outras famílias:\nhttps://projetoescolasegura.com.br",
       "etapas": [
         {
           "nome": "Petição publicada na Change.org",
