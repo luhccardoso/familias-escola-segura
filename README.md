@@ -1,9 +1,5 @@
 # Famílias por uma Escola Segura
 
-Site do movimento de mães e pais por um plano contra o bullying e o cyberbullying.
+O site está temporariamente fora do ar: a branch `main` publica apenas uma página simples.
 
-- Site: https://projetoescolasegura.com.br/
-- Conteúdo do site (resumo, pedidos, linha do tempo, petição): `assets/config.js`.
-- Total de assinaturas: `assets/assinaturas.json`, atualizado de hora em hora pela tarefa `.github/workflows/assinaturas.yml`.
-- Pesquisa anônima: planilha do Google com o script `apps-script/Codigo.gs` (passo a passo em `apps-script/LEIA-ME.md`); o endereço vai em `api`, em `assets/config.js`.
-- Textos de orientação: `assets/textos.js`.
+O site completo, com todo o conteúdo e a tarefa de atualizar as assinaturas, está guardado na branch `site-completo`. Para voltar com ele, basta trazer essa branch de volta para a `main`.
